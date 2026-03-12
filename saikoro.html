@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>🎲 今日の運勢 🎲</title>
+<style>
+body{
+  text-align:center;
+  font-family:sans-serif;
+  background:linear-gradient(#eef6ff,#cfe2ff);
+}
+h1{
+  font-size:40px;
+  margin-top:30px;
+}
+.scene{
+  display:flex;
+  justify-content:center;
+  gap:80px;
+  margin:60px;
+  perspective:800px;
+}
+.dice{
+  width:130px;
+  height:130px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 1s;
+}
+.face{
+  position:absolute;
+  width:130px;
+  height:130px;
+  background:white;
+  border:3px solid #333;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(3,1fr);
+}
+.dot{
+  width:26px;
+  height:26px;
+  background:black;
+  border-radius:50%;
+  margin:auto;
+}
+.red{
+  background:red;
+}
+.front  { transform:rotateY(0deg) translateZ(65px); }
+.back   { transform:rotateY(180deg) translateZ(65px) rotateY(180deg); }
+.right  { transform:rotateY(90deg) translateZ(65px); }
+.left   { transform:rotateY(-90deg) translateZ(65px); }
+.top    { transform:rotateX(-90deg) translateZ(65px); } /* 5 */
+.bottom { transform:rotateX(90deg) translateZ(65px) rotateY(180deg); } /* 2 */
+button{
+  font-size:24px;
+  padding:15px 40px;
+  cursor:pointer;
+}
+#result{
+  font-size:28px;
+  margin-top:20px;
+  font-weight:bold;
+  white-space: pre-line;
+}
+</style>
+</head>
+<body>
+
+<h1>🎲 今日の運勢 🎲</h1>
+
+<div class="scene">
+<div class="dice" id="dice1">
+  <div class="face front">
+    <div></div><div></div><div></div>
+    <div></div><div class="dot red"></div><div></div>
+    <div></div><div></div><div></div>
+  </div>
+  <div class="face back">
+    <div class="dot"></div><div></div><div class="dot"></div>
+    <div class="dot"></div><div></div><div class="dot"></div>
+    <div class="dot"></div><div></div><div class="dot"></div>
+  </div>
+  <div class="face right">
+    <div class="dot"></div><div></div><div></div>
+    <div></div><div class="dot red"></div><div></div>
+    <div></div><div></div><div class="dot"></div>
+  </div>
+  <div class="face left">
+    <div class="dot"></div><div></div><div class="dot"></div>
+    <div></div><div></div><div></div>
+    <div class="dot"></div><div></div><div class="dot"></div>
+  </div>
+  <div class="face top">
+    <div class="dot"></div><div></div><div class="dot"></div>
+    <div></div><div class="dot red"></div><div></div>
+    <div class="dot"></div><div></div><div class="dot"></div>
+  </div>
+  <div class="face bottom">
+    <div></div><div></div><div class="dot"></div>
+    <div></div><div></div><div></div>
+    <div class="dot"></div><div></div><div></div>
+  </div>
+</div>
+<div class="dice" id="dice2"></div>
+</div>
+
+<button onclick="roll()">サイコロをふる</button>
+<div id="result"></div>
+
+<script>
+document.getElementById("dice2").innerHTML = document.getElementById("dice1").innerHTML;
+
+function roll(){
+  document.getElementById("result").textContent = "";
+
+  let d1 = Math.floor(Math.random()*6)+1;
+  let d2 = Math.floor(Math.random()*6)+1;
+
+  const map = {
+    1:"rotateX(0deg) rotateY(0deg)",
+    2:"rotateX(90deg) rotateY(0deg)",
+    3:"rotateX(0deg) rotateY(-90deg)",
+    4:"rotateX(0deg) rotateY(90deg)",
+    5:"rotateX(-90deg) rotateY(0deg)",
+    6:"rotateX(180deg) rotateY(0deg)"
+  };
+
+  let dice1 = document.getElementById("dice1");
+  let dice2 = document.getElementById("dice2");
+
+  let baseTime = 800; // サイコロ1の回転時間
+  let dice2Time = baseTime * 1.5; // サイコロ2は1.5倍
+
+  // 両方同時に回転開始
+  dice1.style.transition = "transform " + (baseTime/1000) + "s";
+  dice2.style.transition = "transform " + (dice2Time/1000) + "s";
+  dice1.style.transform = "rotateX("+(540+Math.random()*540)+"deg) rotateY("+(540+Math.random()*540)+"deg)";
+  dice2.style.transform = "rotateX("+(540+Math.random()*540)+"deg) rotateY("+(540+Math.random()*540)+"deg)";
+
+  // サイコロ1は通常に停止
+  setTimeout(function(){
+    dice1.style.transition = "transform 0.5s";
+    dice1.style.transform = map[d1];
+  }, baseTime);
+
+  // サイコロ2停止 → さらに1秒後に結果表示
+  setTimeout(function(){
+    dice2.style.transition = "transform 0.5s";
+    dice2.style.transform = map[d2];
+
+    setTimeout(function(){
+      let display1 = (d1===2)?5:(d1===5)?2:d1;
+      let display2 = (d2===2)?5:(d2===5)?2:d2;
+      let total = display1 + display2;
+
+      const fortune = {
+        2: "★☆☆☆☆ 最低の運勢…気をつけて",
+        3: "★★☆☆☆ 少し注意の日",
+        4: "★★☆☆☆ 小さな幸運あり",
+        5: "★★★☆☆ 平凡な一日",
+        6: "★★★☆☆ ちょっと良いことあるかも",
+        7: "★★★★☆ 幸運の兆しあり",
+        8: "★★★★☆ いい日になりそう",
+        9: "★★★★★ 素晴らしい一日",
+        10:"★★★★★ とても良い運勢！",
+        11:"★★★★★★ 最高に幸運！",
+        12:"★★★★★★ ミラクル級の運勢！"
+      };
+
+      document.getElementById("result").textContent =
+        "結果：" + display1 + " + " + display2 + " = " + total +
+        "\n今日の運勢：" + fortune[total];
+
+    }, 1000); // サイコロ2停止から1秒後に表示
+  }, dice2Time);
+}
+</script>
+
+</body>
+</html>
