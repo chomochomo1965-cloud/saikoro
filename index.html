@@ -2,32 +2,29 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎲 今日の運勢　🎲</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎲 今日の運勢 🎲</title>
 <style>
 body{
   text-align:center;
   font-family:sans-serif;
   background:linear-gradient(#eef6ff,#cfe2ff);
   margin:0;
-  padding:0;
 }
 h1{
-  font-size:32px;
-  margin-top:20px;
+  font-size:8vw;
+  margin-top:5vw;
 }
 .scene{
   display:flex;
   justify-content:center;
-  gap:20px;
-  margin:40px;
+  gap:5vw;
+  margin:10vw;
   perspective:800px;
 }
 .dice{
-  width:120px;
-  height:120px;
-  max-width:30vw;
-  max-height:30vw;
+  width:25vw;
+  height:25vw;
   position:relative;
   transform-style:preserve-3d;
   transition:transform 1s;
@@ -37,22 +34,21 @@ h1{
   width:100%;
   height:100%;
   background:white;
-  border:3px solid #333;
+  border:0.7vw solid #333;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   grid-template-rows:repeat(3,1fr);
 }
 .dot{
-  width:20px;
-  height:20px;
-  max-width:15vw;
-  max-height:15vw;
+  width:20%;
+  height:20%;
   background:black;
   border-radius:50%;
   margin:auto;
 }
-.red{ background:red; }
-
+.red{
+  background:red;
+}
 .front  { transform:rotateY(0deg) translateZ(50%); }
 .back   { transform:rotateY(180deg) translateZ(50%) rotateY(180deg); }
 .right  { transform:rotateY(90deg) translateZ(50%); }
@@ -61,13 +57,14 @@ h1{
 .bottom { transform:rotateX(90deg) translateZ(50%) rotateY(180deg); }
 
 button{
-  font-size:20px;
-  padding:10px 25px;
+  font-size:5vw;
+  padding:2vw 4vw;
   cursor:pointer;
+  margin-top:5vw;
 }
 #result{
-  font-size:20px;
-  margin-top:20px;
+  font-size:6vw;
+  margin-top:3vw;
   font-weight:bold;
   white-space: pre-line;
 }
@@ -79,44 +76,37 @@ button{
 
 <div class="scene">
   <div class="dice" id="dice1">
-    <!-- 1 -->
     <div class="face front">
       <div></div><div></div><div></div>
       <div></div><div class="dot red"></div><div></div>
       <div></div><div></div><div></div>
     </div>
-    <!-- 6 -->
     <div class="face back">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div class="dot"></div><div></div><div class="dot"></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
-    <!-- 3 -->
     <div class="face right">
       <div class="dot"></div><div></div><div></div>
       <div></div><div class="dot red"></div><div></div>
       <div></div><div></div><div class="dot"></div>
     </div>
-    <!-- 4 -->
     <div class="face left">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div></div><div></div><div></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
-    <!-- 5 -->
     <div class="face top">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div></div><div class="dot red"></div><div></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
-    <!-- 2 -->
     <div class="face bottom">
       <div></div><div></div><div class="dot"></div>
       <div></div><div></div><div></div>
       <div class="dot"></div><div></div><div></div>
     </div>
   </div>
-
   <div class="dice" id="dice2"></div>
 </div>
 
@@ -147,19 +137,16 @@ function roll(){
   let baseTime = 800;
   let dice2Time = baseTime * 1.5;
 
-  // 両方同時に回転開始
-  dice1.style.transition = "transform "+(baseTime/1000)+"s";
-  dice2.style.transition = "transform "+(dice2Time/1000)+"s";
+  dice1.style.transition = "transform " + (baseTime/1000) + "s";
+  dice2.style.transition = "transform " + (dice2Time/1000) + "s";
   dice1.style.transform = "rotateX("+(540+Math.random()*540)+"deg) rotateY("+(540+Math.random()*540)+"deg)";
   dice2.style.transform = "rotateX("+(540+Math.random()*540)+"deg) rotateY("+(540+Math.random()*540)+"deg)";
 
-  // サイコロ1停止
   setTimeout(function(){
     dice1.style.transition = "transform 0.5s";
     dice1.style.transform = map[d1];
   }, baseTime);
 
-  // サイコロ2停止 → 1秒後に結果表示
   setTimeout(function(){
     dice2.style.transition = "transform 0.5s";
     dice2.style.transform = map[d2];
@@ -187,7 +174,7 @@ function roll(){
         "結果：" + display1 + " + " + display2 + " = " + total +
         "\n今日の運勢：" + fortune[total];
 
-    }, 1000); // サイコロ2停止後1秒
+    }, 1000);
   }, dice2Time);
 }
 </script>
