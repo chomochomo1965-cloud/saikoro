@@ -8,9 +8,9 @@
 body{
   text-align:center;
   font-family:sans-serif;
-  background: #87CEFA; /* 背景ブルー */
+  background: #87CEFA;
   margin:0;
-  padding-bottom:120px; /* ボタンの分の余白 */
+  padding-bottom:160px;
 }
 h1{
   font-size:32px;
@@ -57,20 +57,15 @@ h1{
 .top    { transform:rotateX(-90deg) translateZ(60px); }
 .bottom { transform:rotateX(90deg) translateZ(60px) rotateY(180deg); }
 
-/* サイコロをふるボタンを大きく・1行表示 */
 button{
   font-size:24px;
-  padding:15px 50px;     /* 横幅を広く */
-  min-width:220px;       /* 最低幅を確保 */
+  padding:12px 20px;
   cursor:pointer;
-  position: fixed;       
-  bottom: 20px;          
-  left: 50%;             
-  transform: translateX(-50%);
-  z-index: 1000;         
-  border-radius:12px;    
-  background:#fff;       
-  border:3px solid #333; 
+  border-radius:12px;
+  background:#fff;
+  border:3px solid #333;
+  white-space: nowrap;
+  margin:0;
 }
 #result{
   font-size:26px;
@@ -82,73 +77,95 @@ button{
 #result .small{
   font-size:80%;
 }
+
+/* 運勢の枠 */
+.fortune-box {
+  border: 3px solid #333;
+  border-radius: 12px;
+  background: #fff8dc;
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 26px;
+  margin-top: 10px;
+}
+
+#cumulative-container {
+  margin-top:20px;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+#cumulative{
+  font-size:24px;
+  font-weight:bold;
+  padding:10px 15px;
+  border:3px solid #333;
+  border-radius:12px;
+  background:#fff;
+}
+.container-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display:flex;
+  gap:20px;
+  z-index:1000;
+}
 </style>
 </head>
 <body>
 
 <h1>🎲 今日の運勢 🎲</h1>
 
-<div class="scene">
-  <div class="dice" id="dice1">
-    <div class="face front">
-      <div></div><div></div><div></div>
-      <div></div><div class="dot red"></div><div></div>
-      <div></div><div></div><div></div>
+<!-- サイコロと結果をまとめる -->
+<div>
+  <div class="scene">
+    <div class="dice" id="dice1">
+      <div class="face front"><div></div><div></div><div></div><div></div><div class="dot red"></div><div></div><div></div><div></div><div></div></div>
+      <div class="face back"><div class="dot"></div><div></div><div class="dot"></div><div class="dot"></div><div></div><div class="dot"></div><div class="dot"></div><div></div><div class="dot"></div></div>
+      <div class="face right"><div></div><div></div><div class="dot"></div><div></div><div class="dot red"></div><div></div><div class="dot"></div><div></div><div></div></div>
+      <div class="face left"><div class="dot"></div><div></div><div class="dot"></div><div></div><div></div><div></div><div class="dot"></div><div></div><div class="dot"></div></div>
+      <div class="face top"><div class="dot"></div><div></div><div class="dot"></div><div></div><div class="dot red"></div><div></div><div class="dot"></div><div></div><div class="dot"></div></div>
+      <div class="face bottom"><div></div><div></div><div class="dot"></div><div></div><div></div><div></div><div class="dot"></div><div></div><div></div></div>
     </div>
-    <div class="face back">
-      <div class="dot"></div><div></div><div class="dot"></div>
-      <div class="dot"></div><div></div><div class="dot"></div>
-      <div class="dot"></div><div></div><div class="dot"></div>
-    </div>
-    <div class="face right">
-      <div></div><div></div><div class="dot"></div>
-      <div></div><div class="dot red"></div><div></div>
-      <div class="dot"></div><div></div><div></div>
-    </div>
-    <div class="face left">
-      <div class="dot"></div><div></div><div class="dot"></div>
-      <div></div><div></div><div></div>
-      <div class="dot"></div><div></div><div class="dot"></div>
-    </div>
-    <div class="face top">
-      <div class="dot"></div><div></div><div class="dot"></div>
-      <div></div><div class="dot red"></div><div></div>
-      <div class="dot"></div><div></div><div class="dot"></div>
-    </div>
-    <div class="face bottom">
-      <div></div><div></div><div class="dot"></div>
-      <div></div><div></div><div></div>
-      <div class="dot"></div><div></div><div></div>
-    </div>
+    <div class="dice" id="dice2"></div>
   </div>
-  <div class="dice" id="dice2"></div>
+
+  <!-- サイコロの下に結果表示 -->
+  <div id="result"></div>
 </div>
 
-<button onclick="roll()">サイコロをふる</button>
-<div id="result"></div>
+<!-- 累計合計とクリアボタン -->
+<div id="cumulative-container">
+  <div id="cumulative">累計point：0</div>
+  <button onclick="clearTotal()">クリア</button>
+</div>
+
+<div class="container-buttons">
+  <button onclick="roll()">サイコロをふる</button>
+</div>
 
 <script>
-// サイコロ2は1と同じHTML
 document.getElementById("dice2").innerHTML = document.getElementById("dice1").innerHTML;
 
-// ゆうちゃん向け運勢
+let cumulativeTotal = 0;
+
 const fortune = {
-  2: "😐😐😐😐😐\n<span class='small'>ゆうちゃん、最低の運勢だよ…気をつけてね</span>",
-  3: "🙂🙂🙂😐😐\n<span class='small'>ゆうちゃん、少し注意の日だよ</span>",
-  4: "🙂🙂🙂🙂😐\n<span class='small'>ゆうちゃん、小さな幸運ありだよ</span>",
-  5: "😄😄😄😐😐\n<span class='small'>ゆうちゃん、平凡な一日だよ</span>",
-  6: "😄😄😄😄😐\n<span class='small'>ゆうちゃん、ちょっと良いことあるかも</span>",
-  7: "😃😃😃😃😃\n<span class='small'>ゆうちゃん、幸運の兆しありだよ</span>",
-  8: "😃😃😃😃😃\n<span class='small'>ゆうちゃん、いい日になりそう</span>",
-  9: "🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、素晴らしい一日だよ</span>",
-  10:"🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、とても良い運勢だよ</span>",
-  11:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、最高に幸運だよ！</span>",
-  12:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、ミラクル級の運勢だよ！</span>"
+  2: "😐😐😐😐😐\n<span class='small'>ゆうちゃん最低の運勢だよ…気をつけてね</span>",
+  3: "🙂🙂🙂😐😐\n<span class='small'>ゆうちゃん少し注意の日だよ</span>",
+  4: "🙂🙂🙂🙂😐\n<span class='small'>ゆうちゃん小さな幸運ありだよ</span>",
+  5: "😄😄😄😐😐\n<span class='small'>ゆうちゃん平凡な一日だよ</span>",
+  6: "😄😄😄😄😐\n<span class='small'>ゆうちゃんちょっと良いことあるかも</span>",
+  7: "😃😃😃😃😃\n<span class='small'>ゆうちゃん幸運の兆しありだよ</span>",
+  8: "😃😃😃😃😃\n<span class='small'>ゆうちゃんいい日になりそう</span>",
+  9: "🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん素晴らしい一日だよ</span>",
+  10:"🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃんとても良い運勢だよ</span>",
+  11:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん最高に幸運だよ！</span>",
+  12:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃんミラクル級の運勢だよ！</span>"
 };
 
 function roll(){
-  document.getElementById("result").textContent = "";
-
   let d1 = Math.floor(Math.random()*6)+1;
   let d2 = Math.floor(Math.random()*6)+1;
 
@@ -186,12 +203,22 @@ function roll(){
       let display2 = (d2===2)?5:(d2===5)?2:d2;
       let total = display1 + display2;
 
+      cumulativeTotal += total;
+
+      // 「今回の結果」を運勢の上に表示
       document.getElementById("result").innerHTML =
-        "結果：" + display1 + " + " + display2 + " = " + total +
-        "<br>" + fortune[total];
+        "今回の結果：" + total + "<br>" +
+        "<div class='fortune-box'>" + fortune[total] + "</div>";
+
+      document.getElementById("cumulative").textContent = "累計point：" + cumulativeTotal;
 
     }, 1000);
   }, dice2Time);
+}
+
+function clearTotal(){
+  cumulativeTotal = 0;
+  document.getElementById("cumulative").textContent = "累計point：0";
 }
 </script>
 
