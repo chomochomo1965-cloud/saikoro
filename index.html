@@ -11,27 +11,27 @@ body{
   background:linear-gradient(#eef6ff,#cfe2ff);
 }
 h1{
-  font-size:40px;
+  font-size:32px;  /* 文字を少し小さく */
   margin-top:30px;
 }
 .scene{
   display:flex;
   justify-content:center;
-  gap:80px;
-  margin:60px;
+  gap:60px;  /* サイコロ間の間隔を少し狭め */
+  margin:50px;
   perspective:800px;
 }
 .dice{
-  width:160px;   /* 少し大きくしました */
-  height:160px;
+  width:120px;   /* サイコロを小さめに */
+  height:120px;
   position:relative;
   transform-style:preserve-3d;
   transition:transform 1s;
 }
 .face{
   position:absolute;
-  width:160px;
-  height:160px;
+  width:120px;
+  height:120px;
   background:white;
   border:3px solid #333;
   display:grid;
@@ -39,8 +39,8 @@ h1{
   grid-template-rows:repeat(3,1fr);
 }
 .dot{
-  width:32px;   /* ドットも少し大きく */
-  height:32px;
+  width:24px;   /* ドットも少し小さく */
+  height:24px;
   background:black;
   border-radius:50%;
   margin:auto;
@@ -48,19 +48,19 @@ h1{
 .red{
   background:red;
 }
-.front  { transform:rotateY(0deg) translateZ:80px; }
-.back   { transform:rotateY(180deg) translateZ(80px) rotateY(180deg); }
-.right  { transform:rotateY(90deg) translateZ(80px); }
-.left   { transform:rotateY(-90deg) translateZ(80px); }
-.top    { transform:rotateX(-90deg) translateZ(80px); } /* 5 */
-.bottom { transform:rotateX(90deg) translateZ(80px) rotateY(180deg); } /* 2 */
+.front  { transform:rotateY(0deg) translateZ(60px); }
+.back   { transform:rotateY(180deg) translateZ(60px) rotateY(180deg); }
+.right  { transform:rotateY(90deg) translateZ(60px); }
+.left   { transform:rotateY(-90deg) translateZ(60px); }
+.top    { transform:rotateX(-90deg) translateZ(60px); } /* 5 */
+.bottom { transform:rotateX(90deg) translateZ(60px) rotateY(180deg); } /* 2 */
 button{
-  font-size:28px;   /* ボタンも少し大きく */
-  padding:18px 45px;
+  font-size:24px;
+  padding:15px 40px;
   cursor:pointer;
 }
 #result{
-  font-size:32px;
+  font-size:26px;  /* 結果表示も少し小さく */
   margin-top:20px;
   font-weight:bold;
   white-space: pre-line;
@@ -163,8 +163,8 @@ function roll(){
         8: "★★★★☆ いい日になりそう",
         9: "★★★★★ 素晴らしい一日",
         10:"★★★★★ とても良い運勢！",
-        11:"★★★★★★ 最高に幸運！",
-        12:"★★★★★★ ミラクル級の運勢！"
+        11:"★★★★★ 最高に幸運！",
+        12:"★★★★★ ミラクル級の運勢！"
       };
 
       document.getElementById("result").textContent =
