@@ -10,7 +10,7 @@ body{
   font-family:sans-serif;
   background: #87CEFA; /* 背景ブルー */
   margin:0;
-  padding-bottom:100px; /* ボタンの分の余白 */
+  padding-bottom:120px; /* ボタンの分の余白 */
 }
 h1{
   font-size:32px;
@@ -57,15 +57,20 @@ h1{
 .top    { transform:rotateX(-90deg) translateZ(60px); }
 .bottom { transform:rotateX(90deg) translateZ(60px) rotateY(180deg); }
 
+/* サイコロをふるボタンを大きく・1行表示 */
 button{
   font-size:24px;
-  padding:15px 40px;
+  padding:15px 50px;     /* 横幅を広く */
+  min-width:220px;       /* 最低幅を確保 */
   cursor:pointer;
-  position: fixed;       /* 画面下に固定 */
-  bottom: 20px;          /* 下から20px上げる */
-  left: 50%;             /* 横中央に */
+  position: fixed;       
+  bottom: 20px;          
+  left: 50%;             
   transform: translateX(-50%);
-  z-index: 1000;         /* 上に表示 */
+  z-index: 1000;         
+  border-radius:12px;    
+  background:#fff;       
+  border:3px solid #333; 
 }
 #result{
   font-size:26px;
@@ -85,37 +90,31 @@ button{
 
 <div class="scene">
   <div class="dice" id="dice1">
-    <!-- 1の目 -->
     <div class="face front">
       <div></div><div></div><div></div>
       <div></div><div class="dot red"></div><div></div>
       <div></div><div></div><div></div>
     </div>
-    <!-- 6の目 -->
     <div class="face back">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div class="dot"></div><div></div><div class="dot"></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
-    <!-- 3の目 -->
     <div class="face right">
       <div></div><div></div><div class="dot"></div>
       <div></div><div class="dot red"></div><div></div>
       <div class="dot"></div><div></div><div></div>
     </div>
-    <!-- 4の目 -->
     <div class="face left">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div></div><div></div><div></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
-    <!-- 5の目 -->
     <div class="face top">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div></div><div class="dot red"></div><div></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
-    <!-- 2の目 -->
     <div class="face bottom">
       <div></div><div></div><div class="dot"></div>
       <div></div><div></div><div></div>
@@ -132,7 +131,7 @@ button{
 // サイコロ2は1と同じHTML
 document.getElementById("dice2").innerHTML = document.getElementById("dice1").innerHTML;
 
-// ゆうちゃん向け運勢（コメントを<span>で囲み文字サイズ80％）
+// ゆうちゃん向け運勢
 const fortune = {
   2: "😐😐😐😐😐\n<span class='small'>ゆうちゃん、最低の運勢だよ…気をつけてね</span>",
   3: "🙂🙂🙂😐😐\n<span class='small'>ゆうちゃん、少し注意の日だよ</span>",
