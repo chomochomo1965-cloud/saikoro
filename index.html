@@ -147,22 +147,25 @@ button{
 </div>
 
 <script>
+// サイコロ2をコピー
 document.getElementById("dice2").innerHTML = document.getElementById("dice1").innerHTML;
 
-let cumulativeTotal = 0;
+// ページ読み込み時に累計をlocalStorageから読み込む
+let cumulativeTotal = Number(localStorage.getItem('cumulativeTotal')) || 0;
+document.getElementById("cumulative").textContent = "累計point：" + cumulativeTotal;
 
 const fortune = {
-  2: "😐😐😐😐😐\n<span class='small'>ゆうちゃん最低の運勢だよ…気をつけてね</span>",
-  3: "🙂🙂🙂😐😐\n<span class='small'>ゆうちゃん少し注意の日だよ</span>",
-  4: "🙂🙂🙂🙂😐\n<span class='small'>ゆうちゃん小さな幸運ありだよ</span>",
-  5: "😄😄😄😐😐\n<span class='small'>ゆうちゃん平凡な一日だよ</span>",
-  6: "😄😄😄😄😐\n<span class='small'>ゆうちゃんちょっと良いことあるかも</span>",
-  7: "😃😃😃😃😃\n<span class='small'>ゆうちゃん幸運の兆しありだよ</span>",
-  8: "😃😃😃😃😃\n<span class='small'>ゆうちゃんいい日になりそう</span>",
-  9: "🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん素晴らしい一日だよ</span>",
-  10:"🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃんとても良い運勢だよ</span>",
-  11:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん最高に幸運だよ！</span>",
-  12:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃんミラクル級の運勢だよ！</span>"
+  2: "😐😐😐😐😐\n<span class='small'>ゆうちゃん、最低の運勢だよ…気をつけてね</span>",
+  3: "🙂🙂🙂😐😐\n<span class='small'>ゆうちゃん、少し注意の日だよ</span>",
+  4: "🙂🙂🙂🙂😐\n<span class='small'>ゆうちゃん、小さな幸運ありだよ</span>",
+  5: "😄😄😄😐😐\n<span class='small'>ゆうちゃん、平凡な一日だよ</span>",
+  6: "😄😄😄😄😐\n<span class='small'>ゆうちゃん、ちょっと良いことあるかも</span>",
+  7: "😃😃😃😃😃\n<span class='small'>ゆうちゃん、幸運の兆しありだよ</span>",
+  8: "😃😃😃😃😃\n<span class='small'>ゆうちゃん、いい日になりそう</span>",
+  9: "🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、素晴らしい一日だよ</span>",
+  10:"🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、とても良い運勢だよ</span>",
+  11:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、最高に幸運だよ！</span>",
+  12:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、ミラクル級の運勢だよ！</span>"
 };
 
 function roll(){
@@ -203,9 +206,11 @@ function roll(){
       let display2 = (d2===2)?5:(d2===5)?2:d2;
       let total = display1 + display2;
 
+      // 累計に加算してlocalStorageに保存
       cumulativeTotal += total;
+      localStorage.setItem('cumulativeTotal', cumulativeTotal);
 
-      // 「今回の結果」を運勢の上に表示
+      // 結果表示（合計→運勢）
       document.getElementById("result").innerHTML =
         "今回の結果：" + total + "<br>" +
         "<div class='fortune-box'>" + fortune[total] + "</div>";
@@ -216,8 +221,10 @@ function roll(){
   }, dice2Time);
 }
 
+// クリアボタン
 function clearTotal(){
   cumulativeTotal = 0;
+  localStorage.setItem('cumulativeTotal', 0);
   document.getElementById("cumulative").textContent = "累計point：0";
 }
 </script>
