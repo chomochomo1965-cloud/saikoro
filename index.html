@@ -8,7 +8,9 @@
 body{
   text-align:center;
   font-family:sans-serif;
-  background: #87CEFA; /* 背景ブルーに統一 */
+  background: #87CEFA; /* 背景ブルー */
+  margin:0;
+  padding-bottom:100px; /* ボタンの分の余白 */
 }
 h1{
   font-size:32px;
@@ -59,12 +61,21 @@ button{
   font-size:24px;
   padding:15px 40px;
   cursor:pointer;
+  position: fixed;       /* 画面下に固定 */
+  bottom: 20px;          /* 下から20px上げる */
+  left: 50%;             /* 横中央に */
+  transform: translateX(-50%);
+  z-index: 1000;         /* 上に表示 */
 }
 #result{
   font-size:26px;
   margin-top:20px;
   font-weight:bold;
   white-space: pre-line;
+  line-height:1.4;
+}
+#result .small{
+  font-size:80%;
 }
 </style>
 </head>
@@ -121,19 +132,19 @@ button{
 // サイコロ2は1と同じHTML
 document.getElementById("dice2").innerHTML = document.getElementById("dice1").innerHTML;
 
-// ゆうちゃん向け運勢
+// ゆうちゃん向け運勢（コメントを<span>で囲み文字サイズ80％）
 const fortune = {
-  2: "😐😐😐😐😐　\nゆうちゃん、最低の運勢だよ…気をつけてね",
-  3: "🙂🙂🙂😐😐　\nゆうちゃん、少し注意の日だよ",
-  4: "🙂🙂🙂🙂😐　\nゆうちゃん、小さな幸運ありだよ",
-  5: "😄😄😄😐😐　\nゆうちゃん、平凡な一日だよ",
-  6: "😄😄😄😄😐　\nゆうちゃん、ちょっと良いことあるかも",
-  7: "😃😃😃😃😃　\nゆうちゃん、幸運の兆しありだよ",
-  8: "😃😃😃😃😃　\nゆうちゃん、いい日になりそう",
-  9: "🤩🤩🤩🤩🤩　\nゆうちゃん、素晴らしい一日だよ",
-  10:"🤩🤩🤩🤩🤩　\nゆうちゃん、とても良い運勢だよ",
-  11:"🤩🤩🤩🤩🤩🤩\nゆうちゃん、最高に幸運だよ！",
-  12:"🤩🤩🤩🤩🤩🤩\nゆうちゃん、ミラクル級の運勢だよ！"
+  2: "😐😐😐😐😐\n<span class='small'>ゆうちゃん、最低の運勢だよ…気をつけてね</span>",
+  3: "🙂🙂🙂😐😐\n<span class='small'>ゆうちゃん、少し注意の日だよ</span>",
+  4: "🙂🙂🙂🙂😐\n<span class='small'>ゆうちゃん、小さな幸運ありだよ</span>",
+  5: "😄😄😄😐😐\n<span class='small'>ゆうちゃん、平凡な一日だよ</span>",
+  6: "😄😄😄😄😐\n<span class='small'>ゆうちゃん、ちょっと良いことあるかも</span>",
+  7: "😃😃😃😃😃\n<span class='small'>ゆうちゃん、幸運の兆しありだよ</span>",
+  8: "😃😃😃😃😃\n<span class='small'>ゆうちゃん、いい日になりそう</span>",
+  9: "🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、素晴らしい一日だよ</span>",
+  10:"🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、とても良い運勢だよ</span>",
+  11:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、最高に幸運だよ！</span>",
+  12:"🤩🤩🤩🤩🤩🤩\n<span class='small'>ゆうちゃん、ミラクル級の運勢だよ！</span>"
 };
 
 function roll(){
@@ -176,9 +187,9 @@ function roll(){
       let display2 = (d2===2)?5:(d2===5)?2:d2;
       let total = display1 + display2;
 
-      document.getElementById("result").textContent =
+      document.getElementById("result").innerHTML =
         "結果：" + display1 + " + " + display2 + " = " + total +
-        "\n" + fortune[total];
+        "<br>" + fortune[total];
 
     }, 1000);
   }, dice2Time);
