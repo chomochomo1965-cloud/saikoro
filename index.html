@@ -8,21 +8,21 @@
 body{
   text-align:center;
   font-family:sans-serif;
-  background:linear-gradient(#eef6ff,#cfe2ff);
+  background: #87CEFA; /* 背景ブルーに統一 */
 }
 h1{
-  font-size:32px;  /* 文字を少し小さく */
+  font-size:32px;
   margin-top:30px;
 }
 .scene{
   display:flex;
   justify-content:center;
-  gap:60px;  /* サイコロ間の間隔を少し狭め */
+  gap:60px;
   margin:50px;
   perspective:800px;
 }
 .dice{
-  width:120px;   /* サイコロを小さめに */
+  width:120px;
   height:120px;
   position:relative;
   transform-style:preserve-3d;
@@ -39,7 +39,7 @@ h1{
   grid-template-rows:repeat(3,1fr);
 }
 .dot{
-  width:24px;   /* ドットも少し小さく */
+  width:24px;
   height:24px;
   background:black;
   border-radius:50%;
@@ -52,15 +52,16 @@ h1{
 .back   { transform:rotateY(180deg) translateZ(60px) rotateY(180deg); }
 .right  { transform:rotateY(90deg) translateZ(60px); }
 .left   { transform:rotateY(-90deg) translateZ(60px); }
-.top    { transform:rotateX(-90deg) translateZ(60px); } /* 5 */
-.bottom { transform:rotateX(90deg) translateZ(60px) rotateY(180deg); } /* 2 */
+.top    { transform:rotateX(-90deg) translateZ(60px); }
+.bottom { transform:rotateX(90deg) translateZ(60px) rotateY(180deg); }
+
 button{
   font-size:24px;
   padding:15px 40px;
   cursor:pointer;
 }
 #result{
-  font-size:26px;  /* 結果表示も少し小さく */
+  font-size:26px;
   margin-top:20px;
   font-weight:bold;
   white-space: pre-line;
@@ -73,31 +74,37 @@ button{
 
 <div class="scene">
   <div class="dice" id="dice1">
+    <!-- 1の目 -->
     <div class="face front">
       <div></div><div></div><div></div>
       <div></div><div class="dot red"></div><div></div>
       <div></div><div></div><div></div>
     </div>
+    <!-- 6の目 -->
     <div class="face back">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div class="dot"></div><div></div><div class="dot"></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
+    <!-- 3の目 -->
     <div class="face right">
-      <div class="dot"></div><div></div><div></div>
-      <div></div><div class="dot red"></div><div></div>
       <div></div><div></div><div class="dot"></div>
+      <div></div><div class="dot red"></div><div></div>
+      <div class="dot"></div><div></div><div></div>
     </div>
+    <!-- 4の目 -->
     <div class="face left">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div></div><div></div><div></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
+    <!-- 5の目 -->
     <div class="face top">
       <div class="dot"></div><div></div><div class="dot"></div>
       <div></div><div class="dot red"></div><div></div>
       <div class="dot"></div><div></div><div class="dot"></div>
     </div>
+    <!-- 2の目 -->
     <div class="face bottom">
       <div></div><div></div><div class="dot"></div>
       <div></div><div></div><div></div>
@@ -111,7 +118,23 @@ button{
 <div id="result"></div>
 
 <script>
+// サイコロ2は1と同じHTML
 document.getElementById("dice2").innerHTML = document.getElementById("dice1").innerHTML;
+
+// ゆうちゃん向け運勢
+const fortune = {
+  2: "😐😐😐😐😐　\nゆうちゃん、最低の運勢だよ…気をつけてね",
+  3: "🙂🙂🙂😐😐　\nゆうちゃん、少し注意の日だよ",
+  4: "🙂🙂🙂🙂😐　\nゆうちゃん、小さな幸運ありだよ",
+  5: "😄😄😄😐😐　\nゆうちゃん、平凡な一日だよ",
+  6: "😄😄😄😄😐　\nゆうちゃん、ちょっと良いことあるかも",
+  7: "😃😃😃😃😃　\nゆうちゃん、幸運の兆しありだよ",
+  8: "😃😃😃😃😃　\nゆうちゃん、いい日になりそう",
+  9: "🤩🤩🤩🤩🤩　\nゆうちゃん、素晴らしい一日だよ",
+  10:"🤩🤩🤩🤩🤩　\nゆうちゃん、とても良い運勢だよ",
+  11:"🤩🤩🤩🤩🤩🤩\nゆうちゃん、最高に幸運だよ！",
+  12:"🤩🤩🤩🤩🤩🤩\nゆうちゃん、ミラクル級の運勢だよ！"
+};
 
 function roll(){
   document.getElementById("result").textContent = "";
@@ -153,23 +176,9 @@ function roll(){
       let display2 = (d2===2)?5:(d2===5)?2:d2;
       let total = display1 + display2;
 
-      const fortune = {
-        2: "★☆☆☆☆ 最低の運勢…気をつけて",
-        3: "★★☆☆☆ 少し注意の日",
-        4: "★★☆☆☆ 小さな幸運あり",
-        5: "★★★☆☆ 平凡な一日",
-        6: "★★★☆☆ ちょっと良いことあるかも",
-        7: "★★★★☆ 幸運の兆しあり",
-        8: "★★★★☆ いい日になりそう",
-        9: "★★★★★ 素晴らしい一日",
-        10:"★★★★★ とても良い運勢！",
-        11:"★★★★★ 最高に幸運！",
-        12:"★★★★★ ミラクル級の運勢！"
-      };
-
       document.getElementById("result").textContent =
         "結果：" + display1 + " + " + display2 + " = " + total +
-        "\n今日の運勢：" + fortune[total];
+        "\n" + fortune[total];
 
     }, 1000);
   }, dice2Time);
